@@ -1,0 +1,52 @@
+version: "3.2"
+services:
+  database:
+    image: postgres:15.2-alpine
+    restart: always
+    volumes:
+      - ./database/create_tables.sql:/docker-entrypoint-initdb.d/1-create_tables.sql:ro
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=keinerex
+      - POSTGRES_DB=base
+    ports:
+      - 5432:5432
+
+  app:
+    build: ./app
+    container_name: app
+    restart: always
+    command:
+      sh -c "cd ./app && gunicorn --bind 0.0.0.0:5000 index:app"
+    expose:
+      - 5000
+    environment:
+      - DATABASE_URL=postgresql://keinerex:password@database:5432/base
+    volumes:
+      - .:/app
+    depends_on:
+      - database
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    depends_on:
+      - database
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=yurk0v-vl@yandex.ru
+      - PGADMIN_DEFAULT_PASSWORD=Njqjnf821
+      - PGADMIN_LISTEN_ADDRESS=0.0.0.0
+      - PGADMIN_LISTEN_PORT=5555
+
+  nginx:
+    build: ./nginx
+    restart: always
+    ports:
+      - 80:80
+    depends_on:
+      - app
+      - pgadmin
+volumes:
+  pgdata:
+  
