@@ -7,7 +7,7 @@ from flask_jwt_extended import JWTManager, create_access_token, set_access_cooki
 
 from db_models import *
 
-bp = Blueprint('api', __name__)
+bp = Blueprint("auth", __name__)
 
 jwt = JWTManager()
 

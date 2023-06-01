@@ -1,6 +1,5 @@
 from database import db
 from .base import BaseModel
-from sqlalchemy.dialects.postgresql import VARCHAR
 
 
 class TritonLoaded(BaseModel):

@@ -1,11 +1,11 @@
 from flask import Blueprint
 from flask import jsonify
-from flask_jwt_extended import JWTManager, jwt_required
+from flask_jwt_extended import jwt_required
 
 from database import db
 from db_models import *
 
-bp = Blueprint('api', __name__)
+bp = Blueprint("models", __name__)
 
 
 @bp.route("", methods=["GET"])
