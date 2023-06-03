@@ -117,6 +117,15 @@ def put_model(id: str):
 def delete_model(id: str):
     model = db.session.query(Model).filter(Model.id == id).first()
 
+    triton_loaded = list(filter(lambda x: x.triton_loaded_version, model.versions))
+    if bool(triton_loaded):
+        path = os.path.abspath("model_repository") + "/" + model.name
+        shutil.rmtree(path)
+
+        triton_loaded = triton_loaded[0]
+        db.session.delete(triton_loaded)
+        db.session.commit()
+
     if model:
         for version in model.versions:
             if version.triton_loaded_version:
