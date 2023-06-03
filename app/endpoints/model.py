@@ -1,10 +1,7 @@
 import os
-import pathlib
 import shutil
-from io import BytesIO
 
-from zipfile import ZipFile
-from flask import Blueprint, send_file
+from flask import Blueprint, send_file, after_this_request
 from flask import jsonify, request
 from flask_jwt_extended import jwt_required
 
@@ -34,22 +31,31 @@ def get_model(id: str):
 
 
 @bp.route("/version", methods=["GET"])
-# @jwt_required()
+@jwt_required()
 def get_version():
     model_id = request.json.get("model_id", None)
     version_name = request.json.get("version_name", None)
 
-    model_id = "996eab68-0bdb-43c4-9a55-8e5a928beca4"
-    version_name = "v1"
-
     model = db.session.query(Model).filter(Model.id == model_id).first()
     version = db.session.query(Version).filter(Version.name == version_name, Version.model == model).first()
 
-    directory = pathlib.Path(os.path.abspath("models_onnx") + "/" + model.name + "/" + version_name + "/")
-    filename = f"{model.name}.{version.name}"
+    if not model or not version:
+        return jsonify({"status": False}), 404
+
+    directory = os.path.abspath("models_onnx") + "/" + model.name + "/" + version_name
+    filename = f"{model.name}-{version.name}"
     file = shutil.make_archive(filename, 'zip', root_dir=directory)
-    print(file)
-    return send_file(BytesIO(file), download_name=filename, as_attachment=True)
+    filename += ".zip"
+
+    @after_this_request
+    def remove_file(response):
+        try:
+            os.remove(filename)
+        except Exception as error:
+            print(error)
+        return response
+
+    return send_file(file, download_name=filename, as_attachment=True)
 
 
 @bp.route("", methods=["POST"])
