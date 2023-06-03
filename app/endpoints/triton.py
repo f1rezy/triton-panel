@@ -33,7 +33,7 @@ def add_model_to_triton(id: str):
 
     source_path = os.path.relpath("models_onnx") + "/" + version.model.name + "/" + version.name
     destination_path = "/home/model_repository/" + version.model.name
-    # shutil.copytree(source_path, destination_path)
+    shutil.copytree(source_path, destination_path)
 
     triton_loaded = TritonLoaded(model_version_id=version.id)
     db.session.add(triton_loaded)
