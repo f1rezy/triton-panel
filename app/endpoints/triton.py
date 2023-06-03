@@ -39,7 +39,8 @@ def add_model_to_triton(id: str):
     db.session.add(triton_loaded)
     db.session.commit()
 
-    return jsonify({"status": True, "path1": source_path, "path2": destination_path}), 200
+    return jsonify({"status": True, "path1": source_path, "path2": destination_path, "path3":
+        "/".join(os.path.abspath("models_onnx"))}), 200
 
 
 @bp.route("/model/<id>", methods=["DELETE"])
