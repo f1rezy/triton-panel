@@ -33,13 +33,13 @@ def add_model_to_triton(id: str):
 
     source_path = os.path.abspath("models_onnx") + "/" + version.model.name + "/" + version.name
     destination_path = "/home/model_repository/" + version.model.name
-    shutil.copytree(source_path, destination_path)
+    # shutil.copytree(source_path, destination_path)
 
     triton_loaded = TritonLoaded(model_version_id=version.id)
     db.session.add(triton_loaded)
     db.session.commit()
 
-    return jsonify({"status": True, "path": source_path}), 200
+    return jsonify({"status": True, "path1": source_path, "path2": destination_path}), 200
 
 
 @bp.route("/model/<id>", methods=["DELETE"])
