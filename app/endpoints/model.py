@@ -112,11 +112,10 @@ def put_model(id: str):
     return jsonify({"status": False}), 208
 
 
-@bp.route("", methods=["DELETE"])
+@bp.route("/<id>", methods=["DELETE"])
 @jwt_required()
-def delete_model():
-    model_id = request.json.get("model_id", None)
-    model = db.session.query(Model).filter(Model.id == model_id).first()
+def delete_model(id: str):
+    model = db.session.query(Model).filter(Model.id == id).first()
 
     if model:
         for version in model.versions:
@@ -132,21 +131,18 @@ def delete_model():
     return jsonify({"status": False}), 404
 
 
-@bp.route("/version", methods=["DELETE"])
+@bp.route("/version/<version_id>", methods=["DELETE"])
 @jwt_required()
-def delete_model():
-    model_id = request.json.get("model_id", None)
-    version_id = request.json.get("version_id", None)
-    model = db.session.query(Model).filter(Model.id == model_id).first()
-    version = db.session.query(Version).filter(Version.id == version_id, Version.model == model).first()
+def delete_version(version_id: str):
+    version = db.session.query(Version).filter(Version.id == version_id, ).first()
 
-    if model and version:
-        if version.triton_loaded_version:
-            db.session.delete(version.triton_loaded_version)
-        db.session.delete(version)
-        db.session.commit()
-        path = os.path.abspath(model.name)
-        shutil.rmtree(path + "/" + version.name)
-        return jsonify({"status": True}), 200
+    if not version:
+        return jsonify({"status": False}), 404
 
-    return jsonify({"status": False}), 404
+    if version.triton_loaded_version:
+        db.session.delete(version.triton_loaded_version)
+    db.session.delete(version)
+    db.session.commit()
+    path = os.path.abspath(version.model.name)
+    shutil.rmtree(path + "/" + version.name)
+    return jsonify({"status": True}), 200
