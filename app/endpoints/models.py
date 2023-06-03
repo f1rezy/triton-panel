@@ -11,4 +11,4 @@ bp = Blueprint("models", __name__)
 @bp.route("", methods=["GET"])
 @jwt_required()
 def get_models():
-    return jsonify([{model.data} for model in db.session.query(Model).all()])
+    return jsonify([model.data for model in db.session.query(Model).all()])
