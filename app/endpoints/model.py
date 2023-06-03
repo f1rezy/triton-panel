@@ -24,7 +24,8 @@ def get_model(id: str):
             "id": model.id,
             "name": model.name,
             "versions": [
-                {"id": version.id, "name": version.name, "triton_loaded": True if version.triton_loaded_version else False}
+                {"id": version.id, "name": version.name,
+                 "triton_loaded": True if version.triton_loaded_version else False}
                 for version in model.versions
             ]
         })
@@ -81,7 +82,9 @@ def post_model():
                 file.save(path)
             return jsonify({"status": True}), 200
 
-    return jsonify({"status": False}), 500
+        return jsonify({"status": True, "id": model.id}), 208
+
+    return jsonify({"status": False}), 204
 
 
 @bp.route("/<id>", methods=["PUT"])
@@ -106,23 +109,44 @@ def put_model(id: str):
             file.save(path)
         return jsonify({"status": True}), 200
 
-    return jsonify({"status": False}), 500
+    return jsonify({"status": False}), 208
 
 
-@bp.route("/<id>", methods=["DELETE"])
+@bp.route("", methods=["DELETE"])
 @jwt_required()
-def delete_model(id: str):
-    model = db.session.query(Model).filter(Model.id == id).first()
+def delete_model():
+    model_id = request.json.get("model_id", None)
+    model = db.session.query(Model).filter(Model.id == model_id).first()
 
     if model:
         for version in model.versions:
-            db.session.delete(version)
             if version.triton_loaded_version:
                 db.session.delete(version.triton_loaded_version)
+            db.session.delete(version)
         db.session.delete(model)
         db.session.commit()
         path = os.path.abspath(model.name)
         shutil.rmtree(path)
+        return jsonify({"status": True}), 200
+
+    return jsonify({"status": False}), 404
+
+
+@bp.route("/version", methods=["DELETE"])
+@jwt_required()
+def delete_model():
+    model_id = request.json.get("model_id", None)
+    version_id = request.json.get("version_id", None)
+    model = db.session.query(Model).filter(Model.id == model_id).first()
+    version = db.session.query(Version).filter(Version.id == version_id, Version.model == model).first()
+
+    if model and version:
+        if version.triton_loaded_version:
+            db.session.delete(version.triton_loaded_version)
+        db.session.delete(version)
+        db.session.commit()
+        path = os.path.abspath(model.name)
+        shutil.rmtree(path + "/" + version.name)
         return jsonify({"status": True}), 200
 
     return jsonify({"status": False}), 404
