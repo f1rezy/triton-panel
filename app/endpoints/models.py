@@ -3,7 +3,7 @@ from flask import jsonify
 from flask_jwt_extended import jwt_required
 
 from database import db
-from db_models import *
+from models import *
 
 bp = Blueprint("models", __name__)
 

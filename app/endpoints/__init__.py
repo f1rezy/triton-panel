@@ -4,8 +4,8 @@ from .model import bp as model_router
 from .triton import bp as triton_router
 
 __all__ = [
-    auth_router,
-    models_router,
-    model_router,
-    triton_router
+    "auth_router",
+    "models_router",
+    "model_router",
+    "triton_router"
 ]

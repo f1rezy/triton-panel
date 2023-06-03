@@ -10,10 +10,11 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL",
-                                                  r"postgresql://keinerex:password@89.208.208.2:5432/base")
+                                                  r"postgresql://admin:password@localhost:5432/base")
+app.config['UPLOAD_FOLDER'] = os.path.abspath("models_onnx")
 app.config["JSON_AS_ASCII"] = False
-app.config['JSON_SORT_KEYS'] = False
-app.config['JWT_COOKIE_CSRF_PROTECT'] = False
+app.config["JSON_SORT_KEYS"] = False
+app.config["JWT_COOKIE_CSRF_PROTECT"] = False
 app.config["JWT_SECRET_KEY"] = "secret"
 app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)

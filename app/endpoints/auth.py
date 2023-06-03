@@ -1,26 +1,14 @@
+import os
 import datetime
 
 from flask import Blueprint
 from flask import jsonify, request
 from flask_jwt_extended import JWTManager, create_access_token, set_access_cookies, unset_jwt_cookies, \
-     get_jwt_identity, get_jwt
-
-from db_models import *
+    get_jwt_identity, get_jwt
 
 bp = Blueprint("auth", __name__)
 
 jwt = JWTManager()
-
-
-@jwt.user_identity_loader
-def user_identity_lookup(user):
-    return user
-
-
-@jwt.user_lookup_loader
-def user_lookup_callback(_jwt_header, jwt_data):
-    identity = jwt_data["sub"]
-    return User.query.filter_by(id=identity).one_or_none()
 
 
 @bp.after_request
@@ -43,16 +31,11 @@ def login():
     username = request.json.get("username", None)
     password = request.json.get("password", None)
 
-    try:
-        user = User.query.filter_by(username=username).one_or_none()
-    except Exception as e:
-        return jsonify({"msg": "error"})
-
-    if not user or not user.check_password(password):
+    if not username == os.environ.get("USERNAME", "admin") or not password == os.environ.get("PASSWORD", "admin"):
         return jsonify({"status": False}), 401
 
     response = jsonify({"status": True})
-    access_token = create_access_token(identity=user.id)
+    access_token = create_access_token(identity="admin")
     set_access_cookies(response, access_token)
     return response
 

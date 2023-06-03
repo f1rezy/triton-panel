@@ -3,7 +3,7 @@ from flask import jsonify, request
 from flask_jwt_extended import jwt_required
 
 from database import db
-from db_models import *
+from models import *
 
 bp = Blueprint("triton", __name__)
 
@@ -16,11 +16,11 @@ def get_triton_loaded_models():
 
 @bp.route("/model/<id>", methods=["POST"])
 @jwt_required()
-def add_model_to_triton(id: int):
+def add_model_to_triton(id: str):
     return jsonify({"status": True})
 
 
 @bp.route("/model/<id>", methods=["DELETE"])
 @jwt_required()
-def delete_model_from_triton(id: int):
+def delete_model_from_triton(id: str):
     return jsonify({"status": True})
