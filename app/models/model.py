@@ -12,7 +12,9 @@ class Model(BaseModel):
 
     @property
     def data(self):
+        triton_loaded = bool(list(filter(lambda x: x.triton_loaded_version, self.versions)))
         return {
             "id": self.id,
-            "name": self.name
+            "name": self.name,
+            "triton_loaded": triton_loaded
         }
