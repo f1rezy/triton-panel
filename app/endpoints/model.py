@@ -117,9 +117,12 @@ def delete_model(id: str):
     if model:
         for version in model.versions:
             db.session.delete(version)
-            db.session.delete(version.triton_loaded_version)
+            if version.triton_loaded_version:
+                db.session.delete(version.triton_loaded_version)
         db.session.delete(model)
         db.session.commit()
+        path = os.path.abspath(model.name)
+        shutil.rmtree(path)
         return jsonify({"status": True}), 200
 
     return jsonify({"status": False}), 404
