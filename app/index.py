@@ -34,9 +34,9 @@ app.register_blueprint(triton_router, url_prefix="/api/triton")
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
-        print(os.path.abspath("triton-panel"))
-        dir_pathes = ["/home/model_repository", "/home/triton-panel/app/models_onnx"]
+        dir_pathes = ["/model_repository", "/triton-panel/app/models_onnx"]
         for dir_path in dir_pathes:
+            dir_path += os.path.abspath("home")
             if not os.path.isdir(dir_path):
                 os.makedirs(dir_path)
     app.run()
