@@ -125,8 +125,8 @@ def delete_model():
             db.session.delete(version)
         db.session.delete(model)
         db.session.commit()
-        path = os.path.abspath(model.name)
-        shutil.rmtree(path)
+        path = os.path.abspath("models_onnx")
+        shutil.rmtree(path + "/" + model.name)
         return jsonify({"status": True}), 200
 
     return jsonify({"status": False}), 404
