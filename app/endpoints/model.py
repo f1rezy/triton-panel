@@ -17,7 +17,7 @@ def get_model(id: str):
     model = db.session.query(Model).filter(Model.id == id).first()
 
     if not model:
-        return jsonify({"status": False}), 404
+        return jsonify({"status": False}), 205
 
     return jsonify(
         {
@@ -144,14 +144,20 @@ def delete_model(id: str):
 @jwt_required()
 def delete_version(version_id: str):
     version = db.session.query(Version).filter(Version.id == version_id, ).first()
+    model = db.session.query(Model).filter(Model.id == version.model.id).first()
 
     if not version:
         return jsonify({"status": False}), 404
 
     if version.triton_loaded_version:
         db.session.delete(version.triton_loaded_version)
-    db.session.delete(version)
+    db.session.delete(version)  
+    path = os.path.abspath("models_onnx")
+    shutil.rmtree(path + "/" + version.model.name + "/" + version.name)
+    if not model.versions:
+        delete_model(model.id)
+        db.session.commit()
+        return jsonify({"status": True, "model_delete": True}), 200
+
     db.session.commit()
-    path = os.path.abspath(version.model.name)
-    shutil.rmtree(path + "/" + version.name)
-    return jsonify({"status": True}), 200
+    return jsonify({"status": True, "model_delete": False}), 200
