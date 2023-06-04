@@ -1,4 +1,5 @@
 import shutil
+import tritonclient.http as httpclient
 
 from flask import Blueprint
 from flask import jsonify
@@ -28,11 +29,18 @@ def get_triton_loaded_models():
 def add_model_to_triton(id: str):
     version = db.session.query(Version).filter(Version.id == id).first()
     if not version:
-        jsonify({"status": False}), 404
+        return jsonify({"status": False}), 404
 
-    source_path = "models_onnx/" + version.model.name + "/" + version.name
-    destination_path = "model_repository/" + version.model.name
-    shutil.copytree(source_path, destination_path)
+    triton_client = httpclient.InferenceServerClient(url="localhost:8000",
+                                                     verbose=False)
+    model_name = version.model.name
+
+    triton_client.load_model(model_name)
+    if not triton_client.is_model_ready(model_name):
+        return jsonify({"status": False})
+
+    config = open(f"models_onnx/{model_name}/{version.name}/config.pbtxt", mode="r").read()
+    triton_client.load_model(model_name, config=config)
 
     triton_loaded = TritonLoaded(model_version_id=version.id)
     db.session.add(triton_loaded)
@@ -53,8 +61,10 @@ def delete_model_from_triton(id: str):
     if not triton_loaded:
         return jsonify({"status": False}), 404
 
-    path = "model_repository/" + model.name
-    shutil.rmtree(path)
+    triton_client = httpclient.InferenceServerClient(url="localhost:8000",
+                                                     verbose=False)
+    model_name = model.name
+    triton_client.unload_model(model_name)
 
     db.session.delete(triton_loaded)
     db.session.commit()
