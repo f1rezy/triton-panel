@@ -137,13 +137,17 @@ def delete_model(id: str):
 @bp.route("/version/<version_id>", methods=["DELETE"])
 @jwt_required()
 def delete_version(version_id: str):
-    version = db.session.query(Version).filter(Version.id == version_id, ).first()
-    model = db.session.query(Model).filter(Model.id == version.model.id).first()
-
+    version = db.session.query(Version).filter(Version.id == version_id).first()
     if not version:
         return jsonify({"status": False}), 404
 
+    model = db.session.query(Model).filter(Model.id == version.model.id).first()
+
     if version.triton_loaded_version:
+        triton_client = grpcclient.InferenceServerClient(url="triton:8001", verbose=False)
+        triton_client.unload_model(model.name)
+        path = "model_repository/" + model.name
+        shutil.rmtree(path)
         db.session.delete(version.triton_loaded_version)
     db.session.delete(version)  
     path = os.path.abspath("models_onnx")
