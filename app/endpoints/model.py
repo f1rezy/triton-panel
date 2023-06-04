@@ -1,5 +1,6 @@
 import os
 import shutil
+import tritonclient.grpc as grpcclient
 
 from flask import Blueprint, send_file, after_this_request
 from flask import jsonify, request
@@ -125,6 +126,12 @@ def delete_model(id: str):
 
     for version in model.versions:
         if version.triton_loaded_version:
+            triton_client = grpcclient.InferenceServerClient(url="localhost:8000", verbose=False)
+            model_name = version.model.name
+            triton_client.unload_model(model_name)
+
+            path = "model_repository/" + version.model.name
+            shutil.rmtree(path)
             db.session.delete(version.triton_loaded_version)
         db.session.delete(version)
     db.session.delete(model)
