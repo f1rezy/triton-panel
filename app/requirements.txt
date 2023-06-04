@@ -7,5 +7,4 @@ flask-jwt-extended
 SQLAlchemy
 flask-Migrate
 flask-Cors
-tritonclient[grpc]
-grpcio
+tritonclient[all]
