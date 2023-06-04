@@ -35,7 +35,7 @@ def add_model_to_triton(id: str):
     destination_path = "model_repository/" + version.model.name
     shutil.copytree(source_path, destination_path)
 
-    triton_client = grpcclient.InferenceServerClient(url="localhost:8001", verbose=False)
+    triton_client = grpcclient.InferenceServerClient(url="triton:8001", verbose=False)
     model_name = version.model.name
 
     triton_client.load_model(model_name)
@@ -60,7 +60,7 @@ def delete_model_from_triton(id: str):
     if not triton_loaded:
         return jsonify({"status": False}), 404
 
-    triton_client = grpcclient.InferenceServerClient(url="localhost:8001", verbose=False)
+    triton_client = grpcclient.InferenceServerClient(url="triton:8001", verbose=False)
     model_name = version.model.name
     triton_client.unload_model(model_name)
     if triton_client.is_model_ready(model_name):
