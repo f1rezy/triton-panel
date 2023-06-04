@@ -112,6 +112,8 @@ def put_model(id: str):
 @jwt_required()
 def delete_model(id: str):
     model = db.session.query(Model).filter(Model.id == id).first()
+    if not model:
+        return jsonify({"status": False}), 404
 
     triton_loaded = db.session.query(TritonLoaded).filter(TritonLoaded.model_version_id.in_([i.id for i in model.versions])).all()
     if triton_loaded:
@@ -119,21 +121,17 @@ def delete_model(id: str):
         shutil.rmtree(path)
 
         for i in triton_loaded:
-            db.session.delete(triton_loaded)
-        db.session.commit()
+            db.session.delete(i)
 
-    if model:
-        for version in model.versions:
-            if version.triton_loaded_version:
-                db.session.delete(version.triton_loaded_version)
-            db.session.delete(version)
-        db.session.delete(model)
-        db.session.commit()
-        path = os.path.abspath("models_onnx")
-        shutil.rmtree(path + "/" + model.name)
-        return jsonify({"status": True}), 200
-
-    return jsonify({"status": False}), 404
+    for version in model.versions:
+        if version.triton_loaded_version:
+            db.session.delete(version.triton_loaded_version)
+        db.session.delete(version)
+    db.session.delete(model)
+    path = os.path.abspath("models_onnx")
+    shutil.rmtree(path + "/" + model.name)
+    db.session.commit()
+    return jsonify({"status": True}), 200
 
 
 @bp.route("/version/<version_id>", methods=["DELETE"])
