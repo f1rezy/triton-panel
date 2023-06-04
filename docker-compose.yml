@@ -54,6 +54,22 @@ services:
     depends_on:
       - app
       - pgadmin
+
+  triton:
+    image: nvcr.io/nvidia/tritonserver:23.05-py3
+    restart: always
+    depends_on:
+      - nginx
+    volumes:
+      - type: bind
+        source: /home/model_repository
+        target: /models
+    command:
+      - tritonserver
+      - --model-repository=/models
+      - --model-control-mode=explicit
+
+
 volumes:
   pgdata:
   
