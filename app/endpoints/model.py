@@ -118,25 +118,18 @@ def delete_model(id: str):
 
     triton_loaded = db.session.query(TritonLoaded).filter(TritonLoaded.model_version_id.in_([i.id for i in model.versions])).all()
     if triton_loaded:
-        path = os.path.abspath("model_repository") + "/" + model.name
+        triton_client = grpcclient.InferenceServerClient(url="triton:8001", verbose=False)
+        triton_client.unload_model(model.name)
+        path = "model_repository/" + model.name
         shutil.rmtree(path)
 
         for i in triton_loaded:
             db.session.delete(i)
 
     for version in model.versions:
-        if version.triton_loaded_version:
-            triton_client = grpcclient.InferenceServerClient(url="localhost:8000", verbose=False)
-            model_name = version.model.name
-            triton_client.unload_model(model_name)
-
-            path = "model_repository/" + version.model.name
-            shutil.rmtree(path)
-            db.session.delete(version.triton_loaded_version)
         db.session.delete(version)
     db.session.delete(model)
-    path = os.path.abspath("models_onnx")
-    shutil.rmtree(path + "/" + model.name)
+    shutil.rmtree("models_onnx/" + model.name)
     db.session.commit()
     return jsonify({"status": True}), 200
 
