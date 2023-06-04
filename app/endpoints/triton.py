@@ -32,15 +32,14 @@ def add_model_to_triton(id: str):
         jsonify({"status": False}), 404
 
     source_path = "models_onnx/" + version.model.name + "/" + version.name
-    destination_path = "../../model_repository/" + version.model.name
+    destination_path = "model_repository/" + version.model.name
     shutil.copytree(source_path, destination_path)
 
     triton_loaded = TritonLoaded(model_version_id=version.id)
     db.session.add(triton_loaded)
     db.session.commit()
 
-    return jsonify({"status": True, "path1": source_path, "path2": destination_path, "path3":
-        "/".join(os.path.abspath("models_onnx").split("/"))}), 200
+    return jsonify({"status": True}), 200
 
 
 @bp.route("/model/<id>", methods=["DELETE"])
@@ -54,7 +53,7 @@ def delete_model_from_triton(id: str):
     if not bool(triton_loaded):
         return jsonify({"status": False}), 404
 
-    path = os.path.abspath("model_repository") + "/" + model.name
+    path = "model_repository/" + model.name
     shutil.rmtree(path)
 
     triton_loaded = triton_loaded[0]

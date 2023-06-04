@@ -31,20 +31,16 @@ def get_model(id: str):
         })
 
 
-@bp.route("/version", methods=["GET"])
+@bp.route("/version/<id>", methods=["GET"])
 @jwt_required()
-def get_version():
-    model_id = request.json.get("model_id", None)
-    version_name = request.json.get("version_name", None)
+def get_version(id: str):
+    version = db.session.query(Version).filter(Version.id == id).first()
 
-    model = db.session.query(Model).filter(Model.id == model_id).first()
-    version = db.session.query(Version).filter(Version.name == version_name, Version.model == model).first()
-
-    if not model or not version:
+    if not version:
         return jsonify({"status": False}), 404
 
-    directory = os.path.abspath("models_onnx") + "/" + model.name + "/" + version_name
-    filename = f"{model.name}-{version.name}"
+    directory = os.path.abspath("models_onnx") + "/" + version.model.name + "/" + version.name
+    filename = f"{version.model.name}-{version.name}"
     file = shutil.make_archive(filename, 'zip', root_dir=directory)
     filename += ".zip"
 
