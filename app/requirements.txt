@@ -8,4 +8,4 @@ SQLAlchemy
 flask-Migrate
 flask-Cors
 tritonclient[grpc]
-grpcio grpcio-tools
+grpcio
