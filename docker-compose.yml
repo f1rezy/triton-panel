@@ -27,6 +27,9 @@ services:
       - PASSWORD=admin
     volumes:
       - .:/app
+      - type: bind
+        source: /home/model_repository
+        target: /app/app/model_repository
     depends_on:
       - database
 
