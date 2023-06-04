@@ -1,5 +1,5 @@
 import shutil
-import tritongrpcclient as grpcclient
+import tritonclient.grpc as grpcclient
 
 from flask import Blueprint
 from flask import jsonify

@@ -1,6 +1,6 @@
 import os
 import shutil
-import tritongrpcclient as grpcclient
+import tritonclient.grpc as grpcclient
 
 from flask import Blueprint, send_file, after_this_request
 from flask import jsonify, request
