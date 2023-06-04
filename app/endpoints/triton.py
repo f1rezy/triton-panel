@@ -31,6 +31,9 @@ def add_model_to_triton(id: str):
     if not version:
         return jsonify({"status": False}), 404
 
+    if [version.triton_loaded_version for version in version.model.versions]:
+        return jsonify({"status": False})
+
     source_path = "models_onnx/" + version.model.name + "/" + version.name
     destination_path = "model_repository/" + version.model.name
     shutil.copytree(source_path, destination_path)
