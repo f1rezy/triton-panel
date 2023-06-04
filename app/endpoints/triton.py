@@ -42,21 +42,21 @@ def add_model_to_triton(id: str):
     return jsonify({"status": True}), 200
 
 
-@bp.route("/model/<id>", methods=["DELETE"])
+@bp.route("/model_version/<id>", methods=["DELETE"])
 @jwt_required()
 def delete_model_from_triton(id: str):
-    model = db.session.query(Model).filter(Model.id == id).first()
+    version = db.session.query(Version).filter(Version.id == id).first()
+    model = db.session.query(Model).filter(Model.id == version.model_id).first()
     if not model:
         return jsonify({"status": False}), 404
 
-    triton_loaded = list(filter(lambda x: x.triton_loaded_version, model.versions))
-    if not bool(triton_loaded):
+    triton_loaded = db.session.query(TritonLoaded).filter(TritonLoaded.model_version_id == version.id).first()
+    if not triton_loaded:
         return jsonify({"status": False}), 404
 
     path = "model_repository/" + model.name
     shutil.rmtree(path)
 
-    triton_loaded = triton_loaded[0]
     db.session.delete(triton_loaded)
     db.session.commit()
 
