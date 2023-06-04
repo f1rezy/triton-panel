@@ -10,7 +10,7 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL",
-                                                  r"postgresql://admin:password@84.23.52.68:5432/base")
+                                                  r"postgresql://admin:password@37.139.40.124:5432/base")
 app.config['UPLOAD_FOLDER'] = os.path.abspath("models_onnx")
 app.config["JSON_AS_ASCII"] = False
 app.config["JSON_SORT_KEYS"] = False
