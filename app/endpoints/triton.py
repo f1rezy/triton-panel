@@ -1,5 +1,6 @@
 import shutil
 import tritonclient.grpc as grpcclient
+from tritonclient.utils import InferenceServerException
 
 from flask import Blueprint
 from flask import jsonify
@@ -26,7 +27,7 @@ def get_triton_loaded_models():
 
 @bp.route("/model_version/<id>", methods=["POST"])
 @jwt_required()
-def add_model_to_triton(id: str):
+def load_model_to_triton(id: str):
     version = db.session.query(Version).filter(Version.id == id).first()
     if not version:
         return jsonify({"status": False}), 404
@@ -41,7 +42,11 @@ def add_model_to_triton(id: str):
     triton_client = grpcclient.InferenceServerClient(url="triton:8001", verbose=False)
     model_name = version.model.name
 
-    triton_client.load_model(model_name)
+    try:
+        triton_client.load_model(model_name)
+    except InferenceServerException as e:
+        return jsonify({"status": False})
+
     if not triton_client.is_model_ready(model_name):
         return jsonify({"status": False})
 
