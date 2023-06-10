@@ -22,5 +22,5 @@ Nothing extra, only the essentials! You can easily add everything else yourself 
 Build the images and spin up the containers:
 
 ```sh
-$ docker-compose up -d --build
+$ docker-compose up --build
 ```
