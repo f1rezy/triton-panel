@@ -1,8 +1,8 @@
 import os
 import shutil
-import tritonclient.grpc as grpcclient
 from typing import Any, List
 
+import tritonclient.grpc as grpcclient
 from fastapi import APIRouter, Depends, HTTPException, UploadFile
 from pydantic import UUID4
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -49,7 +49,8 @@ async def upload_model(
         with open(path, 'wb') as f:
             contents = file.file.read()
             f.write(contents)
-    
+            
+    model = await crud.model.get(db=db, id=model.id)
     return model
 
 
@@ -96,7 +97,8 @@ async def update_model(
         with open(path, 'wb') as f:
             contents = file.file.read()
             f.write(contents)
-    model = await crud.model.get(db=db, id=id)
+            
+    await db.refresh(model)
     return model
 
 

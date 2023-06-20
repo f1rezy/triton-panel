@@ -3,6 +3,8 @@ from typing import Optional
 
 from pydantic import BaseModel, validator, UUID4
 
+from app.core.config import settings
+
 
 # Shared properties
 class VersionBase(BaseModel):
@@ -30,8 +32,8 @@ class VersionInDBBase(VersionBase):
     
     
     @validator("upload_date")
-    def remove_timezone(cls, value: datetime):
-        return value.replace(tzinfo=None)
+    def date_conversion(cls, value: datetime):
+        return value.strftime(settings.DATE_TIME_FORMAT)
     
 
     class Config:
@@ -41,6 +43,11 @@ class VersionInDBBase(VersionBase):
 # Properties to return to client
 class Version(VersionInDBBase):
     pass
+
+
+# Properties to return to client
+class VersionConfig(VersionInDBBase):
+    config: str
 
 
 # Properties properties stored in DB

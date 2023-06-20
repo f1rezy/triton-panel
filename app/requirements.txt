@@ -12,3 +12,4 @@ tritonclient[grpc]
 python-jose
 passlib
 python-multipart
+greenlet

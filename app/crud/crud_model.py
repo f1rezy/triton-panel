@@ -16,14 +16,6 @@ class CRUDModel(CRUDBase[Model, ModelUpload, ModelUpdate]):
         query = await db.execute(select(Model).where(Model.id == id).options(selectinload(Model.versions)))
         return query.scalars().first()
     
-    
-    async def get_multi(
-        self, db: AsyncSession, *, skip: int = 0, limit: int = 100
-    ) -> List[Model]:
-        query = await db.execute(select(Model).options(selectinload(Model.versions)).offset(skip).limit(limit))
-        return query.scalars().all()
-    
-    
     async def create(self, db: AsyncSession, *, obj_in: List[UploadFile]) -> Model:
         model_name = obj_in[0].filename.split("/")[0]
         db_obj = Model(

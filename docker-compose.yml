@@ -30,9 +30,9 @@ services:
       - PASSWORD=admin
     volumes:
       - .:/app
-      # - type: bind
-      #   source: /home/model_repository
-      #   target: /app/app/model_repository
+      - type: bind
+        source: /home/model_repository
+        target: /app/app/model_repository
     depends_on:
       - database
     extra_hosts:
@@ -58,19 +58,19 @@ services:
       - app
       - pgadmin
 
-  # triton:
-  #   image: nvcr.io/nvidia/tritonserver:23.05-py3
-  #   restart: always
-  #   depends_on:
-  #     - nginx
-  #   # volumes:
-  #   #   - type: bind
-  #   #     source: /home/model_repository
-  #   #     target: /models
-  #   command:
-  #     - tritonserver
-  #     - --model-repository=/models
-  #     - --model-control-mode=explicit
+  triton:
+    image: nvcr.io/nvidia/tritonserver:23.05-py3
+    restart: always
+    depends_on:
+      - nginx
+    # volumes:
+    #   - type: bind
+    #     source: /home/model_repository
+    #     target: /models
+    command:
+      - tritonserver
+      - --model-repository=/models
+      - --model-control-mode=explicit
 
 
 volumes:

@@ -10,4 +10,4 @@ class TritonLoaded(Base):
 
     version_id = Column("model_version_id", ForeignKey("versions.id"), nullable=False)
 
-    version = relationship("Version", back_populates="triton_loaded_version")
+    version = relationship("Version", back_populates="triton_loaded_version", lazy='selectin')

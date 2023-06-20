@@ -28,7 +28,7 @@ class Settings(BaseSettings):
 
     PROJECT_NAME: str = "Triton control panel"
     
-    DATE_TIME_FORMAT: str = "%Y-%m-%dT%H:%M:%S.000Z"
+    DATE_TIME_FORMAT: str = "%Y-%m-%d %H:%M:%S"
     
     POSTGRES_HOST: str = environ.get("POSTGRES_HOST", "localhost")
     POSTGRES_PORT: str = environ.get("POSTGRES_PORT", "5432")

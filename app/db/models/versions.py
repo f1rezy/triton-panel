@@ -13,5 +13,5 @@ class Version(Base):
     model_id = Column("model_id", ForeignKey("models.id"), nullable=False)
     upload_date = Column("upload_date", TIMESTAMP(timezone=True), default=datetime.datetime.now(), nullable=False)
 
-    model = relationship("Model", back_populates="versions")
-    triton_loaded_version = relationship("TritonLoaded", back_populates="version")
+    model = relationship("Model", back_populates="versions", lazy='selectin')
+    triton_loaded_version = relationship("TritonLoaded", back_populates="version", lazy='selectin')

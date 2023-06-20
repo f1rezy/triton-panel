@@ -8,7 +8,7 @@ from pydantic import BaseModel, UUID4
 
 # Shared properties
 class TritonLoadedBase(BaseModel):
-    model_version_id: Optional[UUID4] = None
+    version_id: Optional[UUID4] = None
 
 
 # Properties to receive on model upload
@@ -24,7 +24,7 @@ class TritonLoadedUpdate(TritonLoadedBase):
 # Properties shared by models stored in DB
 class TritonLoadedInDBBase(TritonLoadedBase):
     id: UUID4
-    model_version_id: UUID4
+    version_id: UUID4
 
     class Config:
         orm_mode = True
