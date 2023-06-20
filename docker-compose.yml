@@ -63,10 +63,10 @@ services:
     restart: always
     depends_on:
       - nginx
-    # volumes:
-    #   - type: bind
-    #     source: /home/model_repository
-    #     target: /models
+    volumes:
+      - type: bind
+        source: /home/model_repository
+        target: /models
     command:
       - tritonserver
       - --model-repository=/models

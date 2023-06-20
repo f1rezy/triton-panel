@@ -14,7 +14,7 @@ from app.db.connection import get_session
 router = APIRouter()
 
 
-@router.get("/", response_model=List[schemas.Model])
+@router.get("/", response_model=List[schemas.ModelMulti])
 async def get_models(
     db: AsyncSession = Depends(get_session),
     skip: int = 0,
@@ -25,7 +25,13 @@ async def get_models(
     Retrieve models.
     """
     models = await crud.model.get_multi(db, skip=skip, limit=limit)
-    return models
+    return [
+        {
+            "id": model.id,
+            "name": model.name,
+            "triton_loaded": bool(list(filter(lambda x: x.triton_loaded_version, model.versions)))
+        } for model in models
+    ]
 
 
 @router.post("/", response_model=schemas.Model)

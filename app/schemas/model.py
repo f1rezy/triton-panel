@@ -36,6 +36,13 @@ class Model(ModelInDBBase):
     pass
 
 
+# Properties to return to client
+class ModelMulti(ModelBase):
+    id: UUID4
+    name: str
+    triton_loaded: bool
+
+
 # Properties properties stored in DB
 class ModelInDB(ModelInDBBase):
     pass
