@@ -1,7 +1,6 @@
 from typing import Optional, List
 
 from fastapi import UploadFile, File
-from app.schemas.version import Version
 
 from pydantic import BaseModel, UUID4
 
