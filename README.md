@@ -7,9 +7,9 @@ Triton inference server is an open source tool for deploying deep learning model
 ## Technology stack
 The technology stack used includes:
 - [`Python`](https://www.python.org) ver. 3.11
-- [`Flask`](https://flask.palletsprojects.com) ver. 2.2.3
-- [`PostgreSQL`](https://www.postgresql.org) ver. 15.2
-- [`Gunicorn`](https://gunicorn.org) ver. 20.1
+- [`FastAPI`](https://fastapi.tiangolo.com) ver. 0.97.0
+- [`PostgreSQL`](https://www.postgresql.org) ver. 15.3
+- [`Uvicorn`](https://www.uvicorn.org) ver. 0.22.0
 - [`Nginx`](https://nginx.org) ver. 1.20
 - [`Docker`](https://docs.docker.com/get-docker/) and [`Docker Compose`](https://docs.docker.com/compose/)
 

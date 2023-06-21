@@ -8,7 +8,6 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 RUN apt-get update
-
 RUN pip install --upgrade pip
 
 # install dependencies
@@ -19,4 +18,4 @@ RUN pip install -r requirements.txt
 COPY . .
 
 
-EXPOSE 5000
+EXPOSE 8000
