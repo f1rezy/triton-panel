@@ -29,6 +29,7 @@ class VersionInDBBase(VersionBase):
     name: str
     model_id: UUID4
     upload_date: datetime
+    triton_loaded: bool = False
     
     
     @validator("upload_date")
