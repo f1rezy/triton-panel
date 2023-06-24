@@ -6,6 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 
 from app import schemas
+from app.api import deps
 from app.core import security
 from app.core.config import settings
 
@@ -31,3 +32,11 @@ async def login_access_token(
         ),
         "token_type": "bearer"
     }
+    
+    
+@router.post("/login/test-token", response_model=schemas.Msg)
+def test_token(jwt_required: bool = Depends(deps.jwt_required)) -> Any:
+    """
+    Test access token
+    """
+    return "Authorized"
