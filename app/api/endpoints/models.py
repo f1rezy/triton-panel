@@ -38,7 +38,7 @@ async def get_models(
 async def upload_model(
     *,
     db: AsyncSession = Depends(get_session),
-    files: Annotated[List[UploadFile], File(title="file[]")],
+    files: Annotated[list[UploadFile], File(title="file[]")],
     jwt_required: bool = Depends(deps.jwt_required),
 ) -> Any:
     """
