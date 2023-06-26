@@ -16,8 +16,7 @@ if settings.BACKEND_CORS_ORIGINS:
         allow_origins=[str(origin) for origin in settings.BACKEND_CORS_ORIGINS],
         allow_credentials=True,
         allow_methods=["*"],
-        allow_headers=["*"],
-        expose_headers=["*"]
+        allow_headers=["*"]
     )
 
 app.include_router(api_router, prefix=settings.API_STR)
