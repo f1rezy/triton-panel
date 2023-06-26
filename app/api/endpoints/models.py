@@ -1,6 +1,6 @@
 import os
 import shutil
-from typing import Any, List, Annotated
+from typing import Any, List
 
 import tritonclient.grpc as grpcclient
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
@@ -38,7 +38,7 @@ async def get_models(
 async def upload_model(
     *,
     db: AsyncSession = Depends(get_session),
-    files: Annotated[list[UploadFile], File(title="file[]")],
+    files: List[UploadFile],
     jwt_required: bool = Depends(deps.jwt_required),
 ) -> Any:
     """

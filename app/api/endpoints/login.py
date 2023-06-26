@@ -35,7 +35,7 @@ async def login_access_token(
     
     
 @router.post("/login/test-token", response_model=schemas.Msg)
-def test_token(jwt_required: bool = Depends(deps.jwt_required)) -> Any:
+async def test_token(jwt_required: bool = Depends(deps.jwt_required)) -> Any:
     """
     Test access token
     """
