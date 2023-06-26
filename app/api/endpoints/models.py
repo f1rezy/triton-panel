@@ -3,7 +3,7 @@ import shutil
 from typing import Any, List
 
 import tritonclient.grpc as grpcclient
-from fastapi import APIRouter, Depends, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from pydantic import UUID4
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -38,7 +38,7 @@ async def get_models(
 async def upload_model(
     *,
     db: AsyncSession = Depends(get_session),
-    files: List[UploadFile],
+    files: List[UploadFile] = File(title="file[]"),
     jwt_required: bool = Depends(deps.jwt_required),
 ) -> Any:
     """
