@@ -6,7 +6,6 @@ from pydantic import AnyHttpUrl, BaseSettings, PostgresDsn, validator
 
 
 class Settings(BaseSettings):
-    ENV: str = environ.get("ENV", "local")
     APP_HOST: str = environ.get("APP_HOST", "localhost")
     APP_PORT: int = int(environ.get("APP_PORT", 8000))
     API_STR: str = "/api"
@@ -52,8 +51,6 @@ class Settings(BaseSettings):
     
     
     class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
         case_sensitive = True
 
 
