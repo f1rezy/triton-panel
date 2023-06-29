@@ -39,4 +39,6 @@ async def test_token(jwt_required: bool = Depends(deps.jwt_required)) -> Any:
     """
     Test access token
     """
-    return "Authorized"
+    return {
+        "msg": "Authorized"
+    }
