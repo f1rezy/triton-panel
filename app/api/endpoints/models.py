@@ -44,6 +44,13 @@ async def upload_model(
     """
     Upload new model.
     """
+    if not files:
+        return HTTPException(status_code=400, detail="There was an error parsing the body")
+    
+    model = await crud.model.get_by_name(db=db, obj_in=files)
+    if model:
+        return HTTPException(status_code=409, detail="This model already exists")
+    
     model = await crud.model.create(db=db, obj_in=files)
     await crud.version.create(db=db, obj_in=schemas.VersionUpload(name="v1", model_id=model.id))
     

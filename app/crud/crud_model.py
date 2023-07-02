@@ -12,6 +12,11 @@ from typing import List, Optional
 
 
 class CRUDModel(CRUDBase[Model, ModelUpload, ModelUpdate]):
+    async def get_by_name(self, db: AsyncSession, obj_in: List[UploadFile]) -> Optional[Model]:
+        model_name = obj_in[0].filename.split("/")[0]
+        query = await db.execute(select(Model).where(Model.name == model_name))
+        return query.scalars().first()
+    
     async def create(self, db: AsyncSession, *, obj_in: List[UploadFile]) -> Model:
         model_name = obj_in[0].filename.split("/")[0]
         db_obj = Model(
