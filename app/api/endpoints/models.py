@@ -39,7 +39,7 @@ async def upload_model(
     *,
     db: AsyncSession = Depends(get_session),
     files: List[UploadFile],
-    # jwt_required: bool = Depends(deps.jwt_required),
+    jwt_required: bool = Depends(deps.jwt_required),
 ) -> Any:
     """
     Upload new model.
