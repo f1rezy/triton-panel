@@ -1,6 +1,6 @@
 fastapi
 pydantic
-pydantic_settings
+pydantic-settings
 requests
 uvicorn
 pytest
