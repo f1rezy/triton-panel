@@ -4,8 +4,8 @@ services:
     image: postgres
     restart: always
     volumes:
+      - ./database_data:/var/lib/postgresql/data
       - ./database/create_tables.sql:/docker-entrypoint-initdb.d/1-create_tables.sql:ro
-      - pgdata:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=password
