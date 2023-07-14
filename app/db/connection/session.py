@@ -24,10 +24,6 @@ class SessionManager:
 
     def refresh(self) -> None:
         self.engine = create_async_engine("postgresql+asyncpg://admin:password@94.139.246.106:5432/base", echo=False, future=True)
-        
-        Base = declarative_base()
-        with self.engine.begin() as conn:
-            conn.run_sync(Base.metadata.create_all)
 
 
 async def get_session() -> AsyncSession:
