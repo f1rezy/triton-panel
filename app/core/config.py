@@ -42,12 +42,12 @@ class Settings(BaseSettings):
         if isinstance(v, str):
             return v
         return PostgresDsn.build(
-            scheme="postgresql+asyncpg",
+            scheme="postgresql",
             username=values.get("POSTGRES_USER"),
             password=values.get("POSTGRES_PASSWORD"),
             host=values.get("POSTGRES_HOST"),
             port=int(values.get("POSTGRES_PORT")),
-            path=values.get('POSTGRES_DB') or "",
+            path=values.get('POSTGRES_DB'),
         )
     
     
