@@ -22,8 +22,7 @@ class SessionManager:
         return sessionmaker(self.engine, class_=AsyncSession, expire_on_commit=False)
 
     def refresh(self) -> None:
-        database_uri = settings.SQLALCHEMY_DATABASE_URI
-        self.engine = create_async_engine(database_uri, echo=False, future=True)
+        self.engine = create_async_engine("postgresql+asyncpg://admin:password@94.139.246.106:5432/base", echo=False, future=True)
 
 
 async def get_session() -> AsyncSession:
