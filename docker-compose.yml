@@ -21,7 +21,7 @@ services:
     expose:
       - 8000
     environment:
-      - POSTGRES_HOST=37.139.40.124
+      - POSTGRES_HOST=94.139.246.106
       - POSTGRES_PORT=5432
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=password
