@@ -31,7 +31,7 @@ class Settings(BaseSettings):
     DATE_TIME_FORMAT: str = "%Y-%m-%d %H:%M:%S"
     
     POSTGRES_HOST: str = environ.get("POSTGRES_HOST", "localhost")
-    POSTGRES_PORT: str = int(environ.get("POSTGRES_PORT", "5432"))
+    POSTGRES_PORT: str = environ.get("POSTGRES_PORT", "5432")
     POSTGRES_USER: str = environ.get("POSTGRES_USER", "")
     POSTGRES_PASSWORD: str = environ.get("POSTGRES_PASSWORD", "")
     POSTGRES_DB: str = environ.get("POSTGRES_DB", "")
@@ -46,7 +46,7 @@ class Settings(BaseSettings):
             username=values.get("POSTGRES_USER"),
             password=values.get("POSTGRES_PASSWORD"),
             host=values.get("POSTGRES_HOST"),
-            port=values.get("POSTGRES_PORT"),
+            port=int(values.get("POSTGRES_PORT")),
             path=f"/{values.get('POSTGRES_DB') or ''}",
         )
     
