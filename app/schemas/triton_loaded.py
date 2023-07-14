@@ -26,7 +26,7 @@ class TritonLoadedInDBBase(TritonLoadedBase):
     version_id: UUID4
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 # Properties to return to client
