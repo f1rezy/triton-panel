@@ -135,10 +135,10 @@ async def load_version_to_triton(
         return HTTPException(status_code=500)
     if not triton_client.is_model_ready(model_name):
         return HTTPException(status_code=500)
+    print("odiododogfofgoggog")
 
     triton_loaded = await crud.triton_loaded.create(db=db, obj_in=schemas.TritonLoadedUpload(version_id=version.id))
     
-    print(triton_loaded)
     return triton_loaded
 
 
