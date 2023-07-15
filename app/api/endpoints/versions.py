@@ -127,7 +127,8 @@ async def load_version_to_triton(
     destination_path = "model_repository/" + model_name
     shutil.copytree(source_path, destination_path)
 
-    # triton_client = grpcclient.InferenceServerClient(url="triton:8001", verbose=False)
+    triton_client = grpcclient.InferenceServerClient(url="triton:8001", verbose=False)
+    triton_client.load_model(model_name)
 
     # try:
     #     triton_client.load_model(model_name)
