@@ -127,15 +127,14 @@ async def load_version_to_triton(
     destination_path = "model_repository/" + model_name
     shutil.copytree(source_path, destination_path)
 
-    triton_client = grpcclient.InferenceServerClient(url="triton:8001", verbose=False)
+    # triton_client = grpcclient.InferenceServerClient(url="triton:8001", verbose=False)
 
-    try:
-        triton_client.load_model(model_name)
-    except InferenceServerException:
-        return HTTPException(status_code=500)
-    if not triton_client.is_model_ready(model_name):
-        return HTTPException(status_code=500)
-    print("odiododogfofgoggog")
+    # try:
+    #     triton_client.load_model(model_name)
+    # except InferenceServerException:
+    #     return HTTPException(status_code=500)
+    # if not triton_client.is_model_ready(model_name):
+    #     return HTTPException(status_code=500)
 
     triton_loaded = await crud.triton_loaded.create(db=db, obj_in=schemas.TritonLoadedUpload(version_id=version.id))
     
