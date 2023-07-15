@@ -138,6 +138,7 @@ async def load_version_to_triton(
 
     triton_loaded = await crud.triton_loaded.create(db=db, obj_in=schemas.TritonLoadedUpload(version_id=version.id))
     
+    print(triton_loaded)
     return triton_loaded
 
 
