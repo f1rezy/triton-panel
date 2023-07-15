@@ -63,7 +63,6 @@ async def upload_model(
             contents = file.file.read()
             f.write(contents)
             
-    model = await crud.model.get(db=db, id=model.id)
     return model
 
 
