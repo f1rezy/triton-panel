@@ -68,7 +68,7 @@ services:
         target: /models
     command:
       - tritonserver
-      - --model-repository=/models
+      - --model-repository=/model_repository
       - --model-control-mode=explicit
 
 
