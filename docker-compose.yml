@@ -4,8 +4,7 @@ services:
     image: postgres
     restart: always
     volumes:
-      - ./database_data:/var/lib/postgresql/data
-      - ./database/create_tables.sql:/docker-entrypoint-initdb.d/10-create_tables.sql
+      - pgdata:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=password
@@ -71,3 +70,7 @@ services:
       - tritonserver
       - --model-repository=/models
       - --model-control-mode=explicit
+
+
+volumes:
+  pgdata:
