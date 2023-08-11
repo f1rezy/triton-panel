@@ -2,8 +2,7 @@ import secrets
 from os import environ
 from typing import Any, Dict, List, Optional, Union
 
-from pydantic import AnyHttpUrl, PostgresDsn, validator
-from pydantic_settings import BaseSettings
+from pydantic import AnyHttpUrl, PostgresDsn, validator, BaseSettings
 
 
 class Settings(BaseSettings):
