@@ -1,6 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
 
 from app.core.config import settings
 
@@ -23,7 +22,7 @@ class SessionManager:
         return sessionmaker(self.engine, class_=AsyncSession, expire_on_commit=False)
 
     def refresh(self) -> None:
-        self.engine = create_async_engine("postgresql+asyncpg://admin:password@94.139.246.106:5432/base", echo=False, future=True)
+        self.engine = create_async_engine(settings.SQLALCHEMY_DATABASE_URI, echo=False, future=True)
 
 
 async def get_session() -> AsyncSession:
