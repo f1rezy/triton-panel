@@ -22,7 +22,6 @@ class SessionManager:
         return sessionmaker(self.engine, class_=AsyncSession, expire_on_commit=False)
 
     def refresh(self) -> None:
-        print(settings.SQLALCHEMY_DATABASE_URI)
         self.engine = create_async_engine(settings.SQLALCHEMY_DATABASE_URI, echo=False, future=True)
 
 
