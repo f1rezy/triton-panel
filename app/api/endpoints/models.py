@@ -79,6 +79,7 @@ async def get_model(
     model = await crud.model.get(db=db, id=id)
     if not model:
         raise HTTPException(status_code=404, detail="Model not found")
+    await db.refresh(model, attribute_names=["versions"])
     print(model)
     return model
 
