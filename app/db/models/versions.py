@@ -15,3 +15,5 @@ class Version(Base):
 
     model = relationship("Model", back_populates="versions", lazy='selectin')
     triton_loaded_version = relationship("TritonLoaded", back_populates="version", lazy='selectin')
+
+    __mapper_args__ = {"eager_defaults": True}
