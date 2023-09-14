@@ -79,6 +79,7 @@ async def get_model(
     model = await crud.model.get(db=db, id=id)
     if not model:
         raise HTTPException(status_code=404, detail="Model not found")
+    print(model)
     return model
 
 
@@ -139,5 +140,7 @@ async def delete_model(
             await crud.triton_loaded.remove(db=db, id=triton_loaded.id)
     await crud.model.remove(db=db, id=id)
     shutil.rmtree("ml_models/" + model.name)
+
+    print(model)
 
     return model
