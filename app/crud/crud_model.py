@@ -14,7 +14,9 @@ from typing import List, Optional
 class CRUDModel(CRUDBase[Model, ModelUpload, ModelUpdate]):
     async def get(self, db: AsyncSession, id: UUID4) -> Optional[Model]:
         query = await db.execute(select(Model).where(Model.id == id).options(selectinload(Model.versions)))
-        return await db.refresh(query.scalars().first(), attribute_names=["versions"])
+        result = query.scalars().first()
+        print(result)
+        return await db.refresh(result, attribute_names=["versions"])
 
     async def get_by_name(self, db: AsyncSession, obj_in: List[UploadFile]) -> Optional[Model]:
         model_name = obj_in[0].filename.split("/")[0]
