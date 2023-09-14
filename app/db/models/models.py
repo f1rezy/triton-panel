@@ -11,3 +11,5 @@ class Model(Base):
     name = Column("name", VARCHAR(80), nullable=False)
 
     versions = relationship("Version", back_populates="model", lazy='selectin')
+
+    __mapper_args__ = {"eager_defaults": True}
